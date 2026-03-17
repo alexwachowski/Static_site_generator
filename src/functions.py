@@ -232,24 +232,24 @@ def markdown_to_html(markdown):
 def copy_to_public():
     if os.path.exists("./static") != True:
         raise Exception("No static directory exists")
-    if os.path.exists("./public") == True:
-        shutil.rmtree("./public")
+    if os.path.exists("./docs") == True:
+        shutil.rmtree("./docs")
 
-    os.mkdir("./public")
+    os.mkdir("./docs")
     in_static = os.listdir("./static")
 
     for item in in_static:
         is_dir = os.path.isdir(f"./static/{item}")
         if is_dir == True:
-            os.mkdir(f"./public/{item}")
+            os.mkdir(f"./docs/{item}")
             dir_list = os.listdir(f"./static/{item}")
             for file in dir_list:
                 # print("file: ", file)
                 if os.path.isfile(f"./static/{item}/{file}") == True:
-                    shutil.copy(f"./static/{item}/{file}", f"./public/{item}")
+                    shutil.copy(f"./static/{item}/{file}", f"./docs/{item}")
         is_file = os.path.isfile(f"./static/{item}")
         if is_file == True:
-            shutil.copy(f"./static/{item}", f"./public/{item}")
+            shutil.copy(f"./static/{item}", f"./docs/{item}")
         
 
 def extract_title(markdown):
