@@ -280,11 +280,11 @@ def get_md_files(path):
 
     return paths
 
-def generate_page(from_path, template_path, dest_path):
+def generate_page(from_path, template_path, dest_path, basepath):
     print(f"generating page from {from_path} to {dest_path} using {template_path}")
 
-    if os.path.exists('./public') !=True:
-        os.mkdir("./public")
+    if os.path.exists('./docs') !=True:
+        os.mkdir('./docs')
     file = None
     g = open(template_path)
     # temp_file = g.read()
@@ -293,7 +293,7 @@ def generate_page(from_path, template_path, dest_path):
         f = open(from_path)
         temp_file = g.read()
         html_file = f.replace(".md", ".html")
-        public_html = Path(html_file.replace("content", "public"))
+        public_html = Path(html_file.replace("content", "docs"))
         public_html.parent.mkdir(parents=True, exist_ok=True)
         md_file = f.read()
         md_node = markdown_to_html(md_file)
@@ -301,6 +301,10 @@ def generate_page(from_path, template_path, dest_path):
         title = extract_title(md_file)
         temp_file = temp_file.replace("{{ Title }}", title)
         temp_file = temp_file.replace("{{ Content }}", md_html)
+        temp_file = temp_file.replace('href="/', f'href="{basepath}')
+        temp_file = temp_file.replace('src="/', f'src="{basepath}')
+
+
         d = open(html_file, "w")
         d.write(temp_file)
         d.close()
@@ -314,7 +318,7 @@ def generate_page(from_path, template_path, dest_path):
         for file in files:
             temp_file = g.read()
             html_file = file.replace(".md", ".html")
-            public_html = Path(html_file.replace("content", "public"))
+            public_html = Path(html_file.replace("content", "docs"))
             public_html.parent.mkdir(parents=True, exist_ok=True)
             f = open(file)
             md_file = f.read()
@@ -323,6 +327,10 @@ def generate_page(from_path, template_path, dest_path):
             title = extract_title(md_file)
             temp_file = temp_file.replace("{{ Title }}", title)
             temp_file = temp_file.replace("{{ Content }}", md_html)
+            temp_file = temp_file.replace('href="/', f'href="{basepath}')
+            temp_file = temp_file.replace('src="/', f'src="{basepath}')
+
+
             d = open(public_html, "w")
             d.write(temp_file)
             d.close()
